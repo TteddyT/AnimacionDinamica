@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pikachu Pixel Art Animado</title>
+  <style>
+    canvas{
+        border: 1px solid #19c050;
+        background-color: white;
+    }
+  </style>
+  <script>
+      var x = 100;     // posición inicial en X
+      var y = 200;     // posición fija en Y
+      var dx = 4;      // velocidad horizontal
+      var pixelSize = 20;
+
+      function pixel(ctx, px, py, color){
+          ctx.fillStyle = color;
+          ctx.fillRect(px * pixelSize + x, py * pixelSize + y, pixelSize, pixelSize);
+      }
+
+      function drawPikachu(ctx){
+          // Cuerpo
+          let cuerpo = [
+              [6,4],[7,4],[8,4],
+              [5,5],[6,5],[7,5],[8,5],[9,5],
+              [5,6],[6,6],[7,6],[8,6],[9,6],
+              [4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],
+              [4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],
+              [5,9],[6,9],[7,9],[8,9],[9,9],
+              [6,10],[7,10],[8,10]
+          ];
+          cuerpo.forEach(pix => pixel(ctx, pix[0], pix[1], "yellow"));
+
+          // Orejas negras
+          pixel(ctx,6,3,"black");
+          pixel(ctx,8,3,"black");
+
+          // Ojos
+          pixel(ctx,6,5,"black");
+          pixel(ctx,8,5,"black");
+
+          // Mejillas
+          pixel(ctx,5,6,"red");
+          pixel(ctx,9,6,"red");
+
+          // Boca
+          pixel(ctx,7,7,"black");
+
+          // Cola
+          pixel(ctx,10,5,"yellow");
+          pixel(ctx,11,5,"yellow");
+          pixel(ctx,11,4,"yellow");
+          pixel(ctx,12,4,"yellow");
+          pixel(ctx,12,3,"black");
+      }
+
+      function animate(){
+          var canvas = document.getElementById("micanvas");
+          var ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Texto que sigue a Pikachu
+          ctx.font = "20px Comic Sans MS";
+          ctx.fillStyle = "blue";
+          ctx.fillText("тварь из подземного мира", x + 50, y - 20);
+
+          // Dibujar Pikachu
+          drawPikachu(ctx);
+
+          // Rebote en paredes
+          if (x > canvas.width - 13*pixelSize || x < -4*pixelSize){
+              dx = -dx;
+          }
+          x += dx;
+
+          requestAnimationFrame(animate);
+      }
+
+      window.onload = animate;
+  </script>
+</head>
+<body>
+   <canvas id="micanvas" width="800" height="600"></canvas>
+</body>
+</html>
