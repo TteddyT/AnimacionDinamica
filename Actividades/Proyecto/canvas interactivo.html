@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Top 5 Memes</title>
+  <style>
+    body {
+      background: #111;
+      color: #00ff99;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #000;
+      color: #00ffcc;
+      padding: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      border-bottom: 4px solid #00ffcc;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    #meme-container {
+      margin-top: 40px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column; /* 👈 Esto apila los elementos en vertical */
+      align-items: center;    /* Centra imagen y texto */
+    }
+
+    #meme-img {
+      width: 280px;
+      height: auto;
+      border: 3px solid #00ffcc;
+      image-rendering: pixelated;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    #meme-img:hover {
+      transform: rotate(-3deg) scale(1.05);
+    }
+
+    #meme-text {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      background: #000;
+      color: #00ff99;
+      padding: 8px;
+      border: 2px solid #00ffcc;
+      display: inline-block;
+    }
+
+    footer {
+     margin-top: 20px;
+     display: block;         
+     width: fit-content;     
+     margin-left: auto;       
+     margin-right: auto;
+     padding: 6px 12px;
+     background: #000;
+     border: 2px solid #00ffcc;
+     font-size: 1rem;
+     color: #00ffaa;
+     }
+
+
+    footer b {
+      color: #ff00ff;
+    }
+  </style>
+</head>
+<body>
+  <header>Top 5 Memes</header>
+
+  <div id="meme-container">
+    <img id="meme-img" src="meme1.jpg" alt="Meme">
+    <div id="meme-text">Cuando tu amiga te manda fotos de su novio</div>
+  </div>
+
+  <footer>
+    Usa las teclas <b>1 - 5</b> para cambiar de meme.
+  </footer>
+
+  <script>
+    const memeImg = document.getElementById("meme-img");
+    const memeText = document.getElementById("meme-text");
+
+    const memes = {
+      "1": { img: "meme1.jpg", text: "Cuando tu amiga te manda fotos de su novio" },
+      "2": { img: "meme2.jpg", text: "Radar de gays" },
+      "3": { img: "meme3.jpg", text: "Brainrot and chronically online be like" },
+      "4": { img: "meme4.jpg", text: "Voy a contestar Gali" },
+      "5": { img: "meme5.jpg", text: "Jenna Oregano" }
+    };
+
+    document.addEventListener("keydown", (event) => {
+      if (memes[event.key]) {
+        memeImg.src = memes[event.key].img;
+        memeText.textContent = memes[event.key].text;
+      }
+    });
+  </script>
+</body>
+</html>
