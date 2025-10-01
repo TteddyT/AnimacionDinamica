@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Wave Imagen con Fondo</title>
+    <style>
+      body { 
+        background:#111; 
+        display:flex; 
+        flex-direction:column;
+        justify-content:center; 
+        align-items:center; 
+        height:100vh; 
+        margin:0; 
+        color: #fff;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .canvas-container {
+        border: 8px solid #fff;
+        padding: 10px;
+        background: #222;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      canvas { 
+        display: block;
+        background: #000;
+      }
+      #play-btn {
+        margin-top: 20px;
+        cursor: pointer;
+        padding: 10px 20px;
+        background: #fff;
+        color: #000;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s, color 0.3s;
+      }
+      #play-btn:hover {
+        background: #0f0;
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Marique en la naturaleza</h1>
+    <div class="canvas-container">
+      <canvas id="canvas" width="1200" height="800"></canvas>
+    </div>
+
+    
+    <div id="play-btn">Dale clic a este boton no sospechoso</div>
+
+    
+    <audio id="bg-music" src="yak.mp3" loop></audio>
+    
+    <script>
+    window.onload = function () {
+      var music = document.getElementById('bg-music');
+      var btn = document.getElementById('play-btn');
+
+      
+      btn.addEventListener('click', function() {
+        music.play();
+        btn.style.display = 'none';
+      });
+
+     
+      var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          fondo = new Image(),
+          img = new Image(),
+          angle = 0,
+          centerY = canvas.height/2,
+          range = 120,
+          xspeed = 1,
+          yspeed = 0.03;
+
+      fondo.src = "jungle.jpg";  
+      img.src = "marica.png";    
+
+      img.onload = function() {
+        var ball = { x: 100, y: centerY, width: 150, height: 150 };
+
+        (function drawFrame () {
+          window.requestAnimationFrame(drawFrame, canvas);
+
+          if (fondo.complete) {
+            context.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+          } else {
+            context.fillStyle = "#fff";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+          }
+
+          ball.x += xspeed;
+          ball.y = centerY + Math.sin(angle) * range;
+          angle += yspeed;
+
+          if (ball.x + ball.width/2 > canvas.width || ball.x - ball.width/2 < 0) {
+            xspeed *= -1;
+          }
+
+          context.drawImage(img, ball.x - ball.width/2, ball.y - ball.height/2, ball.width, ball.height);
+
+        }());
+      };
+    };
+    </script>
+  </body>
+</html>
