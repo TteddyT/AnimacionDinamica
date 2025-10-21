@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Paint App personalizado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: #f5f5f5;
+
+     
+      background-image: url('kary.jpg'); 
+      background-repeat: repeat;
+      background-size: 200px 200px; 
+      background-position: top left;
+      background-attachment: fixed;
+    }
+
+    #container {
+      margin: 40px auto;
+      text-align: center;
+      width: 960px;
+      background: rgba(30, 33, 38, 0.85); 
+      border: 2px solid #001aff;
+      border-radius: 12px;
+      padding: 20px 0 40px;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 38px;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    canvas {
+      background-color: #fff;
+      border: 2px solid #001aff;
+      border-radius: 10px;
+      cursor: crosshair;
+      display: block;
+      margin: 20px auto;
+    }
+
+    .toolbar {
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 90px;
+      height: 40px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    #red { background: #ff3b3b; }
+    #orange { background: #ff8c1a; }
+    #yellow { background: #ffd11a; color: #000; }
+    #green { background: #00cc44; }
+    #blue { background: #0073e6; }
+    #indigo { background: #4b0082; }
+    #violet { background: #b300b3; }
+
+    #eraser { background: #666; color: #fff; width: 120px; }
+    #fill { background: #ffb700; color: #000; width: 120px; }
+    #borrar { background: #000; color: #ff9c00; width: 150px; }
+
+    button:hover {
+      transform: scale(1.07);
+      background-color: #ff9c00;
+      color: #1c1e22;
+    }
+
+    .controls {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    label {
+      margin-right: 8px;
+      font-weight: 600;
+      color: #ffb700;
+    }
+
+    input[type="range"] {
+      vertical-align: middle;
+      accent-color: #ff9c00;
+    }
+
+    #valorGrosor {
+      font-weight: 700;
+      margin-left: 6px;
+      color: #fff;
+    }
+
+    aside {
+      color: #ccc;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1> Paint con Poco Presupuesto</h1>
+    <div class="toolbar">
+      <button id="red" value="#ff0000">Rojo</button>
+      <button id="orange" value="#ff7f00">Naranja</button>
+      <button id="yellow" value="#ffff00">Amarillo</button>
+      <button id="green" value="#00ff00">Verde</button>
+      <button id="blue" value="#0000ff">Azul</button>
+      <button id="indigo" value="#4b0082">Índigo</button>
+      <button id="violet" value="#8b00ff">Violeta</button>
+
+      <button id="eraser" type="button">Borrador</button>
+      <button id="fill" type="button">Cubeta</button>
+      <button id="borrar" type="button">Borrar Todo</button>
+
+      <span class="controls">
+        <label for="grosor">Grosor:</label>
+        <input id="grosor" type="range" min="1" max="60" value="5">
+        <span id="valorGrosor">5</span> px
+      </span>
+    </div>
+
+    <canvas id="canvas" width="900" height="600"></canvas>
+    <aside>Si me haces tu mejor dibujo te doy las gracias y hasta ahí 🎮</aside>
+  </div>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      let drawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let isEraser = false;
+      let isFillMode = false;
+
+      const getPos = (evt) => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: Math.floor((evt.touches ? evt.touches[0].clientX : evt.clientX) - rect.left),
+          y: Math.floor((evt.touches ? evt.touches[0].clientY : evt.clientY) - rect.top)
+        };
+      };
+
+      function startDraw(evt) {
+        if (isFillMode) {
+          const pos = getPos(evt);
+          floodFill(pos.x, pos.y, hexToRgb(ctx.strokeStyle));
+          return;
+        }
+        evt.preventDefault();
+        const pos = getPos(evt);
+        drawing = true;
+        lastX = pos.x;
+        lastY = pos.y;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+      }
+
+      function draw(evt) {
+        if (!drawing || isFillMode) return;
+        evt.preventDefault();
+        const pos = getPos(evt);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastX = pos.x;
+        lastY = pos.y;
+      }
+
+      function endDraw(evt) {
+        if (!drawing) return;
+        evt.preventDefault();
+        drawing = false;
+        ctx.closePath();
+      }
+
+     
+      function floodFill(startX, startY, fillColor) {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        const width = imageData.width;
+        const height = imageData.height;
+        const stack = [[startX, startY]];
+        const startPos = (startY * width + startX) * 4;
+        const startColor = {
+          r: data[startPos],
+          g: data[startPos + 1],
+          b: data[startPos + 2],
+          a: data[startPos + 3],
+        };
+        if (colorsMatch(startColor, fillColor)) return;
+
+        while (stack.length) {
+          const [x, y] = stack.pop();
+          const pos = (y * width + x) * 4;
+          if (!matchStartColor(pos, startColor, data)) continue;
+          let left = x;
+          while (left >= 0 && matchStartColor((y * width + left) * 4, startColor, data)) left--;
+          left++;
+          let right = x;
+          while (right < width && matchStartColor((y * width + right) * 4, startColor, data)) right++;
+          for (let i = left; i < right; i++) {
+            const p = (y * width + i) * 4;
+            data[p] = fillColor.r;
+            data[p + 1] = fillColor.g;
+            data[p + 2] = fillColor.b;
+            data[p + 3] = 255;
+            if (y > 0) stack.push([i, y - 1]);
+            if (y < height - 1) stack.push([i, y + 1]);
+          }
+        }
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      function matchStartColor(pos, color, data) {
+        return (
+          data[pos] === color.r &&
+          data[pos + 1] === color.g &&
+          data[pos + 2] === color.b &&
+          data[pos + 3] === color.a
+        );
+      }
+
+      function colorsMatch(c1, c2) {
+        return c1.r === c2.r && c1.g === c2.g && c1.b === c2.b;
+      }
+
+      function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(h => h + h).join('');
+        const bigint = parseInt(hex, 16);
+        return {
+          r: (bigint >> 16) & 255,
+          g: (bigint >> 8) & 255,
+          b: bigint & 255,
+          a: 255
+        };
+      }
+
+      
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', endDraw);
+      canvas.addEventListener('mouseleave', endDraw);
+      canvas.addEventListener('touchstart', startDraw, {passive:false});
+      canvas.addEventListener('touchmove', draw, {passive:false});
+      canvas.addEventListener('touchend', endDraw);
+
+      
+      const toolbar = document.querySelector('.toolbar');
+      toolbar.addEventListener('click', function(e) {
+        const target = e.target;
+        if (target.tagName !== 'BUTTON') return;
+
+        if (target.id === 'borrar') {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+
+        if (target.id === 'eraser') {
+          isEraser = !isEraser;
+          isFillMode = false;
+          document.getElementById('fill').textContent = 'Cubeta';
+          if (isEraser) {
+            target.textContent = 'Borrador: ON';
+            ctx.strokeStyle = '#ffffff';
+          } else {
+            target.textContent = 'Borrador';
+          }
+          return;
+        }
+
+        if (target.id === 'fill') {
+          isFillMode = !isFillMode;
+          isEraser = false;
+          document.getElementById('eraser').textContent = 'Borrador';
+          target.textContent = isFillMode ? 'Cubeta: ON' : 'Cubeta';
+          return;
+        }
+
+        if (target.value) {
+          isEraser = false;
+          isFillMode = false;
+          document.getElementById('eraser').textContent = 'Borrador';
+          document.getElementById('fill').textContent = 'Cubeta';
+          ctx.strokeStyle = target.value;
+        }
+      });
+
+      
+      const grosorInput = document.getElementById('grosor');
+      const valorGrosor = document.getElementById('valorGrosor');
+      grosorInput.addEventListener('input', function() {
+        ctx.lineWidth = this.value;
+        valorGrosor.textContent = this.value;
+      });
+    })();
+  </script>
+</body>
+</html>
