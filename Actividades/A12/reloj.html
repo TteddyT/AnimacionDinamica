@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CYRENE PLS COME HOMEEEE</title>
+    <style>
+      
+      body {
+        margin: 0;
+        height: 100vh;
+        background-image: url("3.7.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+     
+      canvas {
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        box-shadow:
+          0 0 40px rgba(180, 120, 255, 0.6),
+          inset 0 0 20px rgba(255, 200, 255, 0.3),
+          inset 0 0 40px rgba(120, 220, 255, 0.2);
+        background: radial-gradient(circle at center, rgba(30, 0, 60, 0.7), rgba(5, 0, 15, 0.95));
+        backdrop-filter: blur(10px);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="520" height="520"></canvas>
+
+    <script>
+    window.onload = function () {
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      
+      const colHoras   = "#ffe28a";  
+      const colMinutos = "#a8d8ff";  
+      const colSegundos= "#ff92ff";  
+
+    
+      const vr_h = 0.02;
+      const vr_m = 0.24;
+      const vr_s = 1.44;
+
+      let ang_h = 0;
+      let ang_m = 0;
+      let ang_s = 0;
+
+      function drawFrame() {
+        requestAnimationFrame(drawFrame);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+        const gradHalo = ctx.createRadialGradient(cx, cy, 200, cx, cy, 260);
+        gradHalo.addColorStop(0, "rgba(255,255,255,0.1)");
+        gradHalo.addColorStop(1, "rgba(180,120,255,0.4)");
+        ctx.beginPath();
+        ctx.arc(cx, cy, 240, 0, Math.PI * 2);
+        ctx.strokeStyle = gradHalo;
+        ctx.lineWidth = 8;
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = "#dca0ff";
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+      
+        ctx.save();
+        ctx.translate(cx, cy);
+        for (let i = 0; i < 12; i++) {
+          const angle = i * 30 * Math.PI / 180;
+          const r1 = 185;
+          const r2 = 210;
+          ctx.beginPath();
+          ctx.moveTo(Math.sin(angle) * r1, -Math.cos(angle) * r1);
+          ctx.lineTo(Math.sin(angle) * r2, -Math.cos(angle) * r2);
+          ctx.strokeStyle = "rgba(255,255,255,0.5)";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+       
+          ctx.beginPath();
+          ctx.arc(Math.sin(angle) * r2, -Math.cos(angle) * r2, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255,0.8)";
+          ctx.fill();
+        }
+        ctx.restore();
+
+     
+        function drawHand(angle, length, width, color) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(angle);
+          ctx.beginPath();
+          ctx.moveTo(0, 10);
+          ctx.lineTo(0, -length);
+          ctx.lineWidth = width;
+          ctx.strokeStyle = color;
+          ctx.lineCap = "round";
+          ctx.shadowBlur = width * 3;
+          ctx.shadowColor = color;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+   
+        drawHand(ang_h, 100, 6, colHoras);
+        drawHand(ang_m, 150, 4, colMinutos);
+        drawHand(ang_s, 180, 2, colSegundos);
+
+      
+        const gradCore = ctx.createRadialGradient(cx, cy, 0, cx, cy, 20);
+        gradCore.addColorStop(0, "#ffffff");
+        gradCore.addColorStop(1, "#a8d8ff");
+        ctx.beginPath();
+        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+        ctx.fillStyle = gradCore;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "#ffbdf7";
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+       
+        ang_h += vr_h * Math.PI / 180;
+        ang_m += vr_m * Math.PI / 180;
+        ang_s += vr_s * Math.PI / 180;
+      }
+
+      drawFrame();
+    };
+    </script>
+  </body>
+</html>
