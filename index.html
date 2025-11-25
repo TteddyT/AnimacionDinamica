@@ -1,40 +1,211 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Animación Dinámica</title>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Animación Dinámica</title>
 
-  <style> 
+  <style>
+    body {
+      margin: 0;
+      font-family: "Georgia", serif;
+      background: url("https://cdn.mos.cms.futurecdn.net/n9ZybPuhE42y6etXEuutWc.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #e0d6c3;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 8, 6, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: -1;
+    }
+
+    nav {
+      width: 100%;
+      background: rgba(32, 27, 23, 0.9);
+      border-bottom: 2px solid #c2a878;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 12px 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #e6d9be;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    nav a:hover {
+      color: #d2b47a;
+      text-shadow: 0 0 10px rgba(210, 180, 122, 0.7);
+    }
+
+    #musicBtn {
+      padding: 8px 18px;
+      background: rgba(54, 46, 38, 0.9);
+      color: #d2b47a;
+      border: 2px solid #c2a878;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 6px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    #musicBtn:hover {
+      background: rgba(90, 75, 60, 1);
+      box-shadow: 0px 0px 10px rgba(210, 180, 122, 0.7);
+    }
+
+    h1 {
+      font-size: 3rem;
+      letter-spacing: 5px;
+      margin-top: 130px;
+      text-transform: uppercase;
+      text-shadow: 0px 0px 15px rgba(255, 245, 224, 0.8);
+    }
+
+    h3 {
+      margin-top: -10px;
+      font-size: 1.5rem;
+      opacity: 0.8;
+    }
+
+    p {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+
+    h4 {
+      margin-top: 30px;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      border-bottom: 2px solid #c2a878;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      width: 60%;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    .list li {
+      margin: 15px 0;
+      padding: 12px;
+      background: rgba(32, 27, 23, 0.65);
+      border: 1px solid #9b855f;
+      border-radius: 6px;
+      backdrop-filter: blur(3px);
+      transition: 0.25s;
+    }
+
+    .list li:hover {
+      transform: translateX(10px);
+      background: rgba(54, 46, 38, 0.85);
+    }
+
+    .list a {
+      color: #e6d9be;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: 0.3s;
+    }
+
+    .list a:hover {
+      color: #d2b47a;
+      text-shadow: 0px 0px 10px rgba(210, 180, 122, 0.7);
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
   </style>
+</head>
+<body>
 
-  </head>
-  <body>
-      <img src="jeff.jpg" width="20%">
-      <br>
-      <br>
-      <h1>Animación Dinámica</h1>
-      <br>
-      <h3>Michael Huizar</h3>
-      <p>Actividades de la materia Animación Dinámica</p>
+  <nav>
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#actividades">Actividades</a></li>
+      <li><a href="https://github.com/TteddyT/AnimacionDinamica" target="_blank">Repositorio</a></li>
+    </ul>
     
-<h4>Actividades</h4>
-<ul class="list">
-  <li><a href="Actividades/A2/paginabasica.html">A2 - Página Básica</a></li>
-  <li><a href="Actividades/A4/pikachumoviendo.html">A2 - Arte en Canvas</a></li>
-  <li><a href="Actividades/A5/retocanvas2.html">A5 - Arte en Canvas 2</a></li>
-  <li><a href="Actividades/Proyecto/canvas interactivo.html">A5 - Página Interactiva </a></li>
-  <li><a href="Actividades/A6/rotacionmouse.html">A6 - Rotación Mouse </a></li>
-  <li><a href="Actividades/A7/coso.html">A7 - Movimiento Senoidal </a></li>
-  <li><a href="Actividades/A8/coso2.html">A8 - Movimiento Senoidal 2 </a></li>
-  <li><a href="Actividades/A10/Paint.html">A10 - Paint App Personalizado </a></li>
-  <li><a href="Actividades/A12/reloj.html">A12 - CYRENE PLS COME HOMEEE </a></li>
-  <li><a href="Actividades/A13/nave.html">A13 - Nave blerp </a></li>
-  <li><a href="Actividades/model/index.html">A14 - Modelo 3D</a></li>
-</ul>
+    <button id="musicBtn">Música</button>
+  </nav>
 
-  </body>
+  <h1>Animación Dinámica</h1>
+  <h3>Michael Huizar</h3>
+  <p>Actividades de la materia Animación Dinámica</p>
 
+  <audio id="bgMusic" loop>
+    <source src="Alicia.mp3" type="audio/mpeg">
+  </audio>
+
+  <h4 id="actividades">Actividades</h4>
+
+  <ul class="list">
+    <li><a href="Actividades/A2/paginabasica.html" target="_blank">A2 - Página Básica</a></li>
+    <li><a href="Actividades/A4/pikachumoviendo.html" target="_blank">A4 - Arte en Canvas</a></li>
+    <li><a href="Actividades/A5/retocanvas2.html" target="_blank">A5 - Arte en Canvas 2</a></li>
+    <li><a href="Actividades/Proyecto/canvas interactivo.html" target="_blank">Proyecto - Página Interactiva</a></li>
+    <li><a href="Actividades/A6/rotacionmouse.html" target="_blank">A6 - Rotación Mouse</a></li>
+    <li><a href="Actividades/A7/coso.html" target="_blank">A7 - Movimiento Senoidal</a></li>
+    <li><a href="Actividades/A8/coso2.html" target="_blank">A8 - Movimiento Senoidal 2</a></li>
+    <li><a href="Actividades/A10/Paint.html" target="_blank">A10 - Paint App Personalizado</a></li>
+    <li><a href="Actividades/A12/reloj.html" target="_blank">A12 - CYRENE PLS COME HOMEEE</a></li>
+    <li><a href="Actividades/A13/nave.html" target="_blank">A13 - Nave blerp</a></li>
+    <li><a href="Actividades/model/index.html" target="_blank">A14 - Modelo 3D</a></li>
+  </ul>
+
+  <footer>© 2025 - Portafolio de Michael Huizar</footer>
+
+<script>
+  const audio = document.getElementById("bgMusic");
+  const btn = document.getElementById("musicBtn");
+
+  btn.addEventListener("click", () => {
+    if (audio.paused) {
+      audio.play();
+      btn.textContent = "⏸ Pausar Música";
+    } else {
+      audio.pause();
+      btn.textContent = "🎵 Música";
+    }
+  });
+</script>
+
+</body>
 </html>
+
 
 
 
